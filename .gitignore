@@ -1,0 +1,4 @@
+__pycache__/
+build/
+dist/
+docutils_xml.egg-info/
