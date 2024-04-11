@@ -23,10 +23,10 @@ Test XsltParser.
 
 import unittest
 import docutils.utils, docutils.frontend
-import StringIO
+import io
 from lxml import etree
 
-from __init__ import DocutilsTestSupport
+from .__init__ import DocutilsTestSupport
 
 from docutils_xml.parsers.xslt import XsltParser, XPathExtension
 from docutils_xml.writers.xslt import XsltWriter
@@ -69,7 +69,7 @@ class XsltParserTestCase(DocutilsTestSupport.ParserTestCase):
             exception class is given the test case is expected to raise this
             exception.
         """
-        self.parser = XsltParser(StringIO.StringIO(self.xslt), self.extension)
+        self.parser = XsltParser(io.StringIO(self.xslt), self.extension)
         """Input parser for this test case."""
         self.option_parser = docutils.frontend.OptionParser(components=(
                 self.parser, ))
@@ -102,7 +102,7 @@ class XsltParserIdentityTestCase(XsltParserTestCase):
     Output checker for XsltParser with identity transformation.
     """
 
-    xslt = u"""\
+    xslt = """\
 <?xml version="1.0"?>
 
 <xsl:stylesheet
@@ -133,16 +133,16 @@ class XsltParserIdentityTestSuite(DocutilsTestSupport.ParserTestSuite):
 identity = { }
 
 identity['simple'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <rootOnly/>
 """,
     """<?xml version="1.0" encoding="utf-8"?>
 <rootOnly/>
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 """,
     etree.LxmlSyntaxError, ),
-    ( u"""<?xml version="1.0" encoding="utf-8"?>
+    ( """<?xml version="1.0" encoding="utf-8"?>
 <rootOnly>
 """,
     etree.LxmlSyntaxError, ),
@@ -161,7 +161,7 @@ identity['encoding'] = (
     """<?xml version="1.0" encoding="utf-8"?>
 <rootOnly/>
 """ ),
-    ( u"""<?xml version="1.0" encoding="ascii"?>
+    ( """<?xml version="1.0" encoding="ascii"?>
 <rootOnly/>
 """,
     """<?xml version="1.0" encoding="utf-8"?>
@@ -173,7 +173,7 @@ identity['encoding'] = (
     """<?xml version="1.0" encoding="utf-8"?>
 <rootOnly/>
 """ ),
-    ( u"""<?xml version="1.0" encoding="utf-8"?>
+    ( """<?xml version="1.0" encoding="utf-8"?>
 <rootOnly/>
 """,
     """<?xml version="1.0" encoding="utf-8"?>
@@ -185,17 +185,17 @@ identity['encoding'] = (
     """<?xml version="1.0" encoding="utf-8"?>
 <root\xC3\x9Cmlaut/>
 """ ),
-    ( u"""<?xml version="1.0" encoding="utf-8"?>
+    ( """<?xml version="1.0" encoding="utf-8"?>
 <rootÜmlaut/>
 """,
     """<?xml version="1.0" encoding="utf-8"?>
 <root\xC3\x9Cmlaut/>
 """ ),
-    ( u"""<?xml version="1.0" encoding="bla"?>
+    ( """<?xml version="1.0" encoding="bla"?>
 <rootÜmlaut/>
 """,
     LookupError ),
-    ( u"""<?xml version="1.0" encoding="iso-8859-1"?>
+    ( """<?xml version="1.0" encoding="iso-8859-1"?>
 <root€mlaut/>
 """,
     UnicodeError ),
@@ -268,7 +268,7 @@ class XsltParserXPathExtensionTestCase(XsltParserTestCase):
     Output checker for XsltParser using XPath extension functions.
     """
 
-    xslt = u"""\
+    xslt = """\
 <?xml version="1.0"?>
 <xsl:stylesheet
     xmlns:ext="http://www.merten-home.de/docutils_xml"
@@ -507,14 +507,14 @@ class XsltParserXPathExtensionTestSuite(DocutilsTestSupport.ParserTestSuite):
 xPathExtension = { }
 
 xPathExtension['simple'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root/>
 """,
     "" ),
     )
 
 xPathExtension['void'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <void/>
 """,
     """
@@ -522,25 +522,25 @@ xPathExtension['void'] = (
     )
 
 xPathExtension['string'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="string" const=""/>
 """,
     """u'Constant'
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root string="Attribute content"/>
 """,
     """u'Attribute content'
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="string" missing=""/>
 """,
     TypeError ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="string" node="">Element content</test>
 """,
     TypeError ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root string="ümlaut"/>
 """,
     """u'\\xfcmlaut'
@@ -548,92 +548,92 @@ xPathExtension['string'] = (
     )
 
 xPathExtension['boolean'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="boolean" const=""/>
 """,
     """True
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root boolean="non-empty"/>
 """,
     """True
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root boolean=""/>
 """,
     """False
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="boolean" missing=""/>
 """,
     TypeError ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="boolean" node="">non-empty</test>
 """,
     TypeError ),
     )
 
 xPathExtension['float'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="float" const=""/>
 """,
     """3.14
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root float="0"/>
 """,
     """0.0
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root float=" -3.7 "/>
 """,
     """-3.7
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root float="1e-3"/>
 """,
     """0.001
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="float" missing=""/>
 """,
     TypeError ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="float" node="">10.7</test>
 """,
     TypeError ),
     )
 
 xPathExtension['int'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="int" const=""/>
 """,
     """42
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root int="0"/>
 """,
     """0
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root int=" -3 "/>
 """,
     """-3
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root int="1e3"/>
 """,
     """1000
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="int" missing=""/>
 """,
     TypeError ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <test type="int" node="">17</test>
 """,
     TypeError ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root int="3.14"/>
 """,
     ValueError ),
@@ -647,7 +647,7 @@ class XsltParserParameterTestCase(XsltParserTestCase):
     Output checker for XsltParser using parameters.
     """
 
-    xslt = u"""\
+    xslt = """\
 <?xml version="1.0"?>
 <xsl:stylesheet
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -704,9 +704,9 @@ class XsltParserParameterTestSuite(DocutilsTestSupport.ParserTestSuite):
 parameter = { }
 
 parameter['simple'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <rootOnly/>""",
-    u"""false
+    """false
 0
 0
 
@@ -718,7 +718,7 @@ parameter['simple'] = (
           'string': 'bla',
           'mandatory': 'given',
           },
-        u"""<?xml version="1.0"?>
+        """<?xml version="1.0"?>
 <rootOnly/>""", ),
     """true
 42
@@ -732,7 +732,7 @@ given
           'string': '',
           'mandatory': ( 1, 2 ),
           },
-        u"""<?xml version="1.0"?>
+        """<?xml version="1.0"?>
 <rootOnly/>""", ),
     """false
 2147483647
@@ -742,16 +742,16 @@ given
 """ ),
     ( ( { 'string': '"\'',
           },
-        u"""<?xml version="1.0"?>
+        """<?xml version="1.0"?>
 <rootOnly/>""", ),
       ValueError ),
     ( ( { 'bool': True,
           'int': 42,
           'float': 3.14,
-          'string': u'ümlaut',
+          'string': 'ümlaut',
           'mandatory': 'given',
           },
-        u"""<?xml version="1.0"?>
+        """<?xml version="1.0"?>
 <rootOnly/>""", ),
     """true
 42

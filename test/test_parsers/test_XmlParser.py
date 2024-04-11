@@ -25,7 +25,7 @@ import unittest
 import docutils.frontend
 from docutils.nodes import Text
 
-from __init__ import DocutilsTestSupport
+from .__init__ import DocutilsTestSupport
 
 from docutils_xml.parsers.xml import Uri2Prefixes, XmlVisitor, XmlParser, SomeChildren
 
@@ -43,7 +43,7 @@ class XmlVisitorMock(XmlVisitor):
     Current indentation depth.
     """
 
-    indent = u"  "
+    indent = "  "
     """
     :type: unicode
 
@@ -167,14 +167,14 @@ class XmlParserTestSuite(DocutilsTestSupport.ParserTestSuite):
 totest = {}
 
 totest['simple'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <rootOnly/>
 """,
   """<document source="test data">
     { :rootOnly
     } :rootOnly
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root>
   <embedded/>
 </root>
@@ -185,7 +185,7 @@ totest['simple'] = (
       } :embedded
     } :root
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root>
   <one/>
   <two/>
@@ -199,7 +199,7 @@ totest['simple'] = (
       } :two
     } :root
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <rootOnly otherAttr='moreContent' attribute="content"/>
 """,
   """<document source="test data">
@@ -209,7 +209,7 @@ totest['simple'] = (
     )
 
 totest['nonAscii'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <rootÜmlaut/>
 """,
   """<document source="test data">
@@ -233,7 +233,7 @@ totest['encoding'] = (
     { :rootOnly
     } :rootOnly
 """ ),
-    ( u"""<?xml version="1.0" encoding="ascii"?>
+    ( """<?xml version="1.0" encoding="ascii"?>
 <rootOnly/>
 """,
   """<document source="test data">
@@ -247,7 +247,7 @@ totest['encoding'] = (
     { :rootOnly
     } :rootOnly
 """ ),
-    ( u"""<?xml version="1.0" encoding="utf-8"?>
+    ( """<?xml version="1.0" encoding="utf-8"?>
 <rootOnly/>
 """,
   """<document source="test data">
@@ -257,29 +257,29 @@ totest['encoding'] = (
     ( """<?xml version="1.0" encoding="utf-8"?>
 <root\xC3\x9Cmlaut/>
 """,
-  u"""<document source="test data">
+  """<document source="test data">
     { :rootmlaut
     } :rootmlaut
 """ ),
-    ( u"""<?xml version="1.0" encoding="utf-8"?>
+    ( """<?xml version="1.0" encoding="utf-8"?>
 <rootÜmlaut/>
 """,
-  u"""<document source="test data">
+  """<document source="test data">
     { :rootmlaut
     } :rootmlaut
 """ ),
-    ( u"""<?xml version="1.0" encoding="bla"?>
+    ( """<?xml version="1.0" encoding="bla"?>
 <rootÜmlaut/>
 """,
     LookupError ),
-    ( u"""<?xml version="1.0" encoding="iso-8859-1"?>
+    ( """<?xml version="1.0" encoding="iso-8859-1"?>
 <root€mlaut/>
 """,
     UnicodeError ),
     )
 
 totest['namespace'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root
     xmlns:int="urn:example"
     xmlns:alias="urn:example"
@@ -302,7 +302,7 @@ totest['namespace'] = (
     )
 
 totest['SkipNode'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root control='SkipNode'>
   <one/>
   <two/>
@@ -314,7 +314,7 @@ totest['SkipNode'] = (
     )
 
 totest['SkipDeparture'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root control='SkipDeparture'>
   <one/>
   <two/>
@@ -330,7 +330,7 @@ totest['SkipDeparture'] = (
     )
 
 totest['SkipSiblings'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root>
   <one control='SkipSiblings'/>
   <two/>
@@ -344,7 +344,7 @@ totest['SkipSiblings'] = (
     )
 
 totest['SkipChildren'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root control='SkipChildren'>
   <one/>
   <two/>
@@ -357,7 +357,7 @@ totest['SkipChildren'] = (
     )
 
 totest['StopTraversal'] = (
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root>
   <one control='StopTraversal'/>
   <two/>
@@ -373,7 +373,7 @@ totest['StopTraversal'] = (
 
 totest['SomeChildren'] = (
     # Take care to use namespaced children
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root xmlns:int="urn:example"
       control='SomeChildren'>
   <int:one/>
@@ -384,7 +384,7 @@ totest['SomeChildren'] = (
     { :root control='SomeChildren'
     } :root
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root xmlns:int="urn:example"
       control='SomeChildren' controlSomeChildren='ex:one'>
   <int:one/>
@@ -397,7 +397,7 @@ totest['SomeChildren'] = (
       } ex:one
     } :root
 """ ),
-    ( u"""<?xml version="1.0"?>
+    ( """<?xml version="1.0"?>
 <root xmlns:int="urn:example"
       control='SomeChildren' controlSomeChildren='ex:one ex:two ex:three'>
   <int:one/>
