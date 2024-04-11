@@ -90,14 +90,14 @@ class XPathExtension(object):
             if len(string) == 0:
                 # Happens for forced but non-existing elements like `text()` in
                 # an empty element
-                return u""
+                return ""
             elif len(string) == 1:
                 string = string[0]
             else:
                 raise TypeError("Encountered an XPath string parameter with more than one (%d) element" % ( len(string), ))
 
-        if isinstance(string, basestring):
-            return unicode(string)
+        if isinstance(string, str):
+            return str(string)
         else:
             raise TypeError("Encountered invalid type for XPath string parameter: %s"
                 % type(string) )
@@ -204,7 +204,7 @@ class XsltParser(docutils.parsers.Parser):
 
         try:
             xsltDoc = etree.parse(xsltSource)
-        except Exception, e:
+        except Exception as e:
             raise Exception("Error parsing XSLT: %s" % ( e, ))
         xsltSource.close()
         if extension is None:
@@ -218,19 +218,19 @@ class XsltParser(docutils.parsers.Parser):
         settings = document.settings.copy()
         settings._source_name = document.current_source
         xsltParams = { }
-        for ( key, val ) in settings.__dict__.items():
+        for ( key, val ) in list(settings.__dict__.items()):
             if isinstance(val, bool):
                 fmt = '%s'
                 if val:
                     val = 'true()'
                 else:
                     val = 'false()'
-            elif isinstance(val, ( int, long )):
+            elif isinstance(val, int):
                 fmt = '%d'
             elif isinstance(val, float):
                 fmt = '%G'
-            elif isinstance(val, basestring):
-                val = unicode(val)
+            elif isinstance(val, str):
+                val = str(val)
                 if "'" in val:
                     if '"' in val:
                         raise ValueError("Can not use string containing single and double quote as XSLT parameter ('%r')"

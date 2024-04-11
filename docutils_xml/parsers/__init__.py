@@ -60,7 +60,7 @@ def encodeForXmlParser(s):
       * `UnicodeError`: If `s` contains characters which are not encodable with
         the encoding given.
     """
-    if not isinstance(s, unicode):
+    if not isinstance(s, str):
         # A non-unicode string is already encoded
         return s
     line1 = s.splitlines()[0]
@@ -74,7 +74,7 @@ def encodeForXmlParser(s):
     except LookupError:
         raise LookupError("Encoding of XML input %r unknown to Python"
                           % ( enc, ))
-    except UnicodeError, e:
+    except UnicodeError as e:
         raise UnicodeError("Encoding of XML input given as %r but there "
                            "are invalid characters while reencoding: %s"
                            % ( enc, e ))

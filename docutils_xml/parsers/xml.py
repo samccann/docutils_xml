@@ -67,7 +67,7 @@ class SomeChildren(docutils.nodes.TreePruningException):
             See `tags`.
 
         """
-        self.tags = [ ( unicode(prefix), unicode(tag) )
+        self.tags = [ ( str(prefix), str(tag) )
                       for ( prefix, tag ) in tags ]
         """
         :type: ( ( unicode, unicode ), ... )
@@ -102,7 +102,7 @@ class Uri2Prefixes(object):
             The strings must be convertable to unicode.
         """
         for uriPfxes in uriPrefixes:
-            pfxList = [ unicode(s)
+            pfxList = [ str(s)
                         for s in uriPfxes ]
             uri = pfxList.pop(0)
             if uri not in self.uri2Prefixes:
@@ -117,7 +117,7 @@ class Uri2Prefixes(object):
                it is shared. Take care to override the namespaces every time
                the parser needs them.
         """
-        for ( uri, prefixes ) in self.uri2Prefixes.items():
+        for ( uri, prefixes ) in list(self.uri2Prefixes.items()):
             for prefix in prefixes:
                 etree.register_namespace(prefix, uri)
 
@@ -350,7 +350,7 @@ class XmlParser(docutils.parsers.Parser):
                 return stop
             except docutils.nodes.SkipDeparture:
                 skipDeparture = True
-            except SomeChildren, e:
+            except SomeChildren as e:
                 someChildren = e.tags
             try:
                 for child in elem:

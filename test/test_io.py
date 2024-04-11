@@ -31,9 +31,9 @@ from docutils_xml.io import ZipFileInput
 
 class HelloZipFileInput(ZipFileInput):
 
-    content = u'Hello world!\n'
+    content = 'Hello world!\n'
 
-    contentUnicode = u'Hello wörld!\n'
+    contentUnicode = 'Hello wörld!\n'
 
     contentPath = "hello.txt"
 
